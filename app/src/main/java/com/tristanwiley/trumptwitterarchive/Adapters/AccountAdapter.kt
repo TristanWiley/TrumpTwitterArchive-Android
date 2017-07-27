@@ -27,8 +27,7 @@ data class TwitterAccount(val account: String, val display: Boolean, val id: Lon
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
-            parcel.readString()) {
-    }
+            parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(account)

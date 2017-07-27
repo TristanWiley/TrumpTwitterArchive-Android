@@ -17,7 +17,12 @@ import java.util.*
 
 data class Tweet(val source: String, val created_at: String, val text: String, val is_retweet: Boolean, val id_str: String)
 
-class TweetAdapter(var context: Context, var accounts: ArrayList<Tweet>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TweetAdapter(var context: Context, var accounts: List<Tweet>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    fun searchTweets(criteria: String) {
+        val filteredArray = accounts.filter { it.text.contains(criteria) }
+        accounts = filteredArray
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         val v = LayoutInflater.from(context).inflate(R.layout.tweet_item_content, parent, false)
