@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +38,10 @@ class TweetFragments : Fragment() {
         Ion.with(activity)
                 .load("http://www.trumptwitterarchive.com/data/${accountName.account}/2017.json")
                 .`as`(object : TypeToken<ArrayList<TweetObject>>() {})
-                .setCallback { _, result ->
+                .setCallback { e, result ->
+                    if (e != null) {
+                        Log.wtf("TweetFragments", e.message)
+                    }
                     tweets.addAll(result)
                     adapter.notifyDataSetChanged()
                     view.progressBar.visibility = View.GONE

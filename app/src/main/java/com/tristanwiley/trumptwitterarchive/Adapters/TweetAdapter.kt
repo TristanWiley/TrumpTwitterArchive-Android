@@ -57,10 +57,7 @@ class TweetAdapter(var context: Context, var accounts: List<TweetObject>) : Recy
             itemView.setOnClickListener {
                 TweetUtils.loadTweet(tweet.id_str.toLong(), object : Callback<Tweet>() {
                     override fun success(result: Result<Tweet>?) {
-                        Log.d("SUCCESS", result?.data?.text)
-                        val alertbox = AlertDialog.Builder(itemView.rootView.context)
-                        alertbox.setView(TweetView(context, result?.data))
-                        alertbox.show()
+                        AlertDialog.Builder(itemView.rootView.context).setView(TweetView(context, result?.data)).show()
                     }
 
                     override fun failure(exception: TwitterException) {
