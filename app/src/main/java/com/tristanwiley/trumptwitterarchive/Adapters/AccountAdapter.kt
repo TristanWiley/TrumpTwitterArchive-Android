@@ -84,6 +84,7 @@ class AccountAdapter(var context: Context, var accounts: ArrayList<TwitterAccoun
                 (context as FragmentActivity).supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.container, fragment)
+                        .addToBackStack(null)
                         .commit()
 
             }

@@ -2,6 +2,7 @@ package com.tristanwiley.trumptwitterarchive
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
@@ -43,14 +44,18 @@ class TweetFragments : Fragment() {
 
     }
 
-    lateinit var accountName: TwitterAccount
+    lateinit var accountObject: TwitterAccount
     var tweets: ArrayList<TweetObject> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = (this.arguments as Bundle)
-        accountName = bundle.getParcelable("account")
+        accountObject = bundle.getParcelable("account")
         setHasOptionsMenu(true)
+        val toolbar = (activity as AppCompatActivity).supportActionBar
+        toolbar?.setDisplayHomeAsUpEnabled(true)
+        toolbar?.setDisplayShowHomeEnabled(true)
+        toolbar?.title = accountObject.name
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -63,7 +68,7 @@ class TweetFragments : Fragment() {
         adapter = TweetAdapter(activity, tweets)
         view.recyclerTweets.adapter = adapter
         Ion.with(activity)
-                .load("http://www.trumptwitterarchive.com/data/${accountName.account}/2017.json")
+                .load("http://www.trumptwitterarchive.com/data/${accountObject.account}/2017.json")
                 .`as`(object : TypeToken<ArrayList<TweetObject>>() {})
                 .setCallback { e, result ->
                     if (e != null) {

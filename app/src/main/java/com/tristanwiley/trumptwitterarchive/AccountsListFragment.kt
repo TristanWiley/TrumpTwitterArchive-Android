@@ -2,6 +2,7 @@ package com.tristanwiley.trumptwitterarchive
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -22,6 +23,9 @@ class AccountsListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_accounts, container, false)
+        val toolbar = (activity as AppCompatActivity).supportActionBar
+        toolbar?.setDisplayHomeAsUpEnabled(false)
+        toolbar?.setDisplayShowHomeEnabled(false)
 
         val context = view.context
         view.recyclerView.layoutManager = LinearLayoutManager(context)
