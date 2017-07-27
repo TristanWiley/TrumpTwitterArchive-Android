@@ -1,23 +1,31 @@
 package com.tristanwiley.trumptwitterarchive.Adapters
 
 import android.content.Context
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.tristanwiley.trumptwitterarchive.R
+import com.twitter.sdk.android.core.Callback
+import com.twitter.sdk.android.core.Result
+import com.twitter.sdk.android.core.TwitterException
+import com.twitter.sdk.android.core.models.Tweet
+import com.twitter.sdk.android.tweetui.TweetUtils
+import com.twitter.sdk.android.tweetui.TweetView
 import kotlinx.android.synthetic.main.tweet_item_content.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 /**
  * Adapter created by Tristan to display all accounts
  */
 
-data class Tweet(val source: String, val created_at: String, val text: String, val is_retweet: Boolean, val id_str: String)
+data class TweetObject(val source: String, val created_at: String, val text: String, val is_retweet: Boolean, val id_str: String)
 
-class TweetAdapter(var context: Context, var accounts: List<Tweet>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TweetAdapter(var context: Context, var accounts: List<TweetObject>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun searchTweets(criteria: String) {
         val filteredArray = accounts.filter { it.text.contains(criteria) }
@@ -37,9 +45,9 @@ class TweetAdapter(var context: Context, var accounts: List<Tweet>) : RecyclerVi
         (holder as Item).bindData(accounts[position])
     }
 
-    class Item(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
+    class Item(itemView: View, val context: Context) : RecyclerView.ViewHolder(itemView) {
         val simpleDateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.getDefault())
-        fun bindData(tweet: Tweet) {
+        fun bindData(tweet: TweetObject) {
             val tweetDate = simpleDateFormat.parse(tweet.created_at)
 
             itemView.tweet_source.text = tweet.source
@@ -47,7 +55,23 @@ class TweetAdapter(var context: Context, var accounts: List<Tweet>) : RecyclerVi
             itemView.tweet_content.text = tweet.text
 
             itemView.setOnClickListener {
-                Log.wtf("TWEET", tweet.text)
+                TweetUtils.loadTweet(tweet.id_str.toLong(), object : Callback<Tweet>() {
+                    override fun success(result: Result<Tweet>?) {
+                        Log.d("SUCCESS", result?.data?.text)
+                        val alertbox = AlertDialog.Builder(itemView.rootView.context)
+                        alertbox.setView(TweetView(context, result?.data))
+                        alertbox.show()
+                    }
+
+                    override fun failure(exception: TwitterException) {
+                        Log.d("AutomaticTwitActivity", " - StealingTwitFromTarget - ERROR: " + exception.toString()
+                                + " Cause:" + exception.cause
+                                + " LocalMessage:" + exception.localizedMessage
+                                + " Message:" + exception.message
+                                + " Stack:" + exception.stackTrace.toString()
+                        )
+                    }
+                })
             }
         }
     }
