@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Trump Twitter Archive</string>
+    <string name="years">Years</string>
 </resources>
