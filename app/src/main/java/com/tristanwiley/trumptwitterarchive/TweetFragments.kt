@@ -17,6 +17,7 @@ import com.koushikdutta.ion.Ion
 import com.tristanwiley.trumptwitterarchive.Adapters.TweetAdapter
 import com.tristanwiley.trumptwitterarchive.Adapters.TweetObject
 import com.tristanwiley.trumptwitterarchive.Adapters.TwitterAccount
+import kotlinx.android.synthetic.main.fragment_tweets.*
 import kotlinx.android.synthetic.main.fragment_tweets.view.*
 import java.util.*
 
@@ -25,7 +26,7 @@ class TweetFragments : Fragment() {
     lateinit var adapter: TweetAdapter
     lateinit var accountObject: TwitterAccount
     var allTweets: ArrayList<TweetObject> = arrayListOf()
-    var tweets: ArrayList<TweetObject> = ArrayList()
+    var tweets: ArrayList<TweetObject> = arrayListOf()
     lateinit var allYears: List<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,13 +67,17 @@ class TweetFragments : Fragment() {
                     if (e != null) {
                         Log.wtf("TweetFragments", e.message)
                     } else {
-                        allTweets.clear()
-                        allTweets.addAll(result)
-                        tweets.clear()
-                        tweets.addAll(result)
-                        adapter.notifyDataSetChanged()
-                        view?.progressBar?.visibility = View.GONE
-                        view?.loadingText?.visibility = View.GONE
+                        if (result.isNotEmpty()) {
+                            allTweets.clear()
+                            allTweets.addAll(result)
+                            tweets.clear()
+                            tweets.addAll(result)
+                            adapter.notifyDataSetChanged()
+                            view?.progressBar?.visibility = View.GONE
+                            view?.loadingText?.visibility = View.GONE
+                        } else {
+                            activity.emptyTweets.text = getString(R.string.tweets_empty, year)
+                        }
                     }
                 }
     }
