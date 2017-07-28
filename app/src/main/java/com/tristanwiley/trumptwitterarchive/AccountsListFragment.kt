@@ -26,6 +26,7 @@ class AccountsListFragment : Fragment() {
         val toolbar = (activity as AppCompatActivity).supportActionBar
         toolbar?.setDisplayHomeAsUpEnabled(false)
         toolbar?.setDisplayShowHomeEnabled(false)
+        toolbar?.title = getString(R.string.app_name)
 
         val context = view.context
         view.recyclerView.layoutManager = LinearLayoutManager(context)
