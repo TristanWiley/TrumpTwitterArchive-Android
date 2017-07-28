@@ -18,7 +18,7 @@
         android:layout_height="match_parent" />
 
     <TextView
-        android:id="@+id/account_year"
+        android:id="@+id/account_tag"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

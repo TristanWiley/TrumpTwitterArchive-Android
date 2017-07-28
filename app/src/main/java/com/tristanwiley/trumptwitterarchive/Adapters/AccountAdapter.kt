@@ -74,7 +74,7 @@ class AccountAdapter(var context: Context, var accounts: ArrayList<TwitterAccoun
         fun bindData(account: TwitterAccount) {
             itemView.account_name.text = account.name
             itemView.account_title.text = account.title
-            itemView.account_year.text = account.startingYear
+            itemView.account_tag.text = account.account
 
             itemView.setOnClickListener {
                 val fragment = TweetFragments()
