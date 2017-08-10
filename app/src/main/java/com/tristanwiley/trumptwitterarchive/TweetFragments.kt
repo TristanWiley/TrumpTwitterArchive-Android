@@ -86,7 +86,7 @@ class TweetFragments : Fragment() {
         inflater?.inflate(R.menu.tweets_menu, menu)
         val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
         val spinner = menu.findItem(R.id.spinner)?.actionView as Spinner
-        val spinnerAdapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item, allYears)
+        val spinnerAdapter = ArrayAdapter(ContextThemeWrapper(activity, R.style.AppTheme), android.R.layout.simple_spinner_item, allYears)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         spinner.adapter = spinnerAdapter

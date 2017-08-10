@@ -5,10 +5,9 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SearchView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.google.gson.reflect.TypeToken
 import com.koushikdutta.ion.Ion
 import com.tristanwiley.trumptwitterarchive.Adapters.AccountAdapter
@@ -18,10 +17,12 @@ import kotlinx.android.synthetic.main.fragment_accounts.view.*
 
 class AccountsListFragment : Fragment() {
     var accounts: ArrayList<TwitterAccount> = arrayListOf()
+    val allAccounts: ArrayList<TwitterAccount> = arrayListOf()
     lateinit var accountsAdapter: AccountAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -52,13 +53,38 @@ class AccountsListFragment : Fragment() {
                         if (result.isNotEmpty()) {
                             accounts.clear()
                             accounts.addAll(result)
+                            accounts.sortBy { it.name }
                             accountsAdapter.notifyDataSetChanged()
+                            allAccounts.clear()
+                            allAccounts.addAll(result)
+                            allAccounts.sortBy { it.name }
                         } else {
                             activity.emptyAccounts.text = getString(R.string.accounts_empty)
                             activity.emptyAccounts.visibility = View.VISIBLE
                         }
                     }
                 }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.accounts_menu, menu)
+        val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
+
+        val queryTextListener = object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String): Boolean {
+                if (allAccounts.isNotEmpty()) {
+                    accountsAdapter.searchTweets(allAccounts, newText)
+                }
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return true
+            }
+        }
+        searchView.setOnQueryTextListener(queryTextListener)
+
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onDetach() {

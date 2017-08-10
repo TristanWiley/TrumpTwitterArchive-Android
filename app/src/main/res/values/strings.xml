@@ -3,4 +3,5 @@
     <string name="years">Years</string>
     <string name="accounts_empty">Can\'t load accounts!</string>
     <string name="tweets_empty">Tweets do not exist for the year %1$d</string>
+    <string name="search">Search</string>
 </resources>

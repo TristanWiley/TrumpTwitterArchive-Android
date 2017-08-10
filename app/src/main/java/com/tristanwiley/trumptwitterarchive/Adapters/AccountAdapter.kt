@@ -57,6 +57,14 @@ data class TwitterAccount(val account: String, val display: Boolean, val id: Lon
 
 class AccountAdapter(var context: Context, var accounts: ArrayList<TwitterAccount>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    fun searchTweets(originalArray: ArrayList<TwitterAccount>, criteria: String) {
+        val filteredArray = originalArray.filter { it.name.contains(criteria) || it.account.contains(criteria) }
+
+        accounts.clear()
+        accounts.addAll(filteredArray)
+        this.notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         val v = LayoutInflater.from(context).inflate(R.layout.account_item_content, parent, false)
         return Item(v, context)
